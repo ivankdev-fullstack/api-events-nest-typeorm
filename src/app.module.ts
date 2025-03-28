@@ -1,7 +1,36 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { appConfig } from './config/app.config';
+import { authConfig } from './config/auth.config';
+import { typeOrmConfig } from './config/database.config';
+import { TypedConfigService } from './config/typed-config.service';
+import { appConfigSchema } from './config/types/config.types';
+import { EventModule } from './event/event.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig, typeOrmConfig, authConfig],
+      validationSchema: appConfigSchema,
+      validationOptions: {
+        abortEarly: true,
+      },
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configSecvice: TypedConfigService) => ({
+        ...configSecvice.get('database'),
+        entities: [],
+      }),
+    }),
+    AuthModule,
+    UserModule,
+    EventModule,
+  ],
   controllers: [],
   providers: [],
 })
