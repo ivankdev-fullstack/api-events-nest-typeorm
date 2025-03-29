@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { IUser } from '../../libs/interfaces/user.interface';
 
 @Entity('users')
-export class User {
+export class User implements IUser {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -13,4 +14,7 @@ export class User {
 
   @Column()
   password: string;
+
+  // @Column()
+  // assigned_events: string;
 }
