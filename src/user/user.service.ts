@@ -23,7 +23,9 @@ export class UserService {
   }
 
   public async create(data: UserCreateRequest): Promise<UserCreateResponse> {
-    const { id } = await this.userRepository.save(data);
-    return { id };
+    const createdUser = this.userRepository.create(data);
+    await this.userRepository.save(createdUser);
+
+    return { id: createdUser.id };
   }
 }
