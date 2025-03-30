@@ -17,14 +17,14 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Setup npm cache
-        run: |
-          npm config set cache /home/ubuntu/.npm
+      # - name: Setup npm cache
+      #   run: |
+      #     npm config set cache /home/ubuntu/.npm
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          # cache: 'npm'
       - name: Install PM2
         run: |
           npm install -g pm2
@@ -36,14 +36,14 @@ jobs:
     steps:
       - name: Pull Code
         uses: actions/checkout@v4
-      - name: Cache Dependencies
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      # - name: Cache Dependencies
+      #   id: cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: node_modules
+      #     key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        # if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
 
   setup-env:
@@ -77,4 +77,4 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     steps:
       - name: Deploy Application
-        run: NODE_ENV=${{inputs.environment}} pm2 restart dist/src/main.js --name=events-api-${{inputs.environment}}
+        run: NODE_ENV=${{inputs.environment}} pm2 restart dist/src/main.js\ --name=events-api-${{inputs.environment}}
