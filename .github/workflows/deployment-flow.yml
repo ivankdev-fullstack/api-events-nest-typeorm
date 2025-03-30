@@ -53,7 +53,7 @@ jobs:
       - name: Setup .env
         run: |
           # APP
-          echo "PORT=${{ vars.PORT }}" >> ${{inputs.env_file}}
+          echo "PORT=${{ secrets.PORT }}" >> ${{inputs.env_file}}
 
           # AUTH
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ${{inputs.env_file}}
@@ -69,7 +69,7 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     steps:
       - name: Build Application
-        id: build-website
+        id: build-application
         run: npm run build
 
   deploy:
