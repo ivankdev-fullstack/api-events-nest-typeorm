@@ -77,4 +77,9 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     steps:
       - name: Deploy Application
-        run: NODE_ENV=${{inputs.environment}} pm2 restart ./dist/src/main.js --name=events-api
+        run: |
+          if pm2 describe events-api > /dev/null; then
+            NODE_ENV=${{inputs.environment}} pm2 restart events-api --update-env
+          else
+            NODE_ENV=${{inputs.environment}} pm2 start ./dist/src/main.js --name=events-api
+          fi
