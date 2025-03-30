@@ -14,7 +14,7 @@ on:
 
 jobs:
   checkout:
-    runs-on: [self-hosted, '${{inputs.runner}}']
+    runs-on: [self-hosted, dev]
     environment: ${{inputs.environment}}
     steps:
       - name: Pull Code
