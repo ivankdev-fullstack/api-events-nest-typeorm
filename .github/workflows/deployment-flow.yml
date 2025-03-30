@@ -17,7 +17,7 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Set npm cache directory
+      - name: Setup npm cache
         run: |
           npm config set cache /home/ubuntu/.npm
       - name: Install Node.js
@@ -27,10 +27,10 @@ jobs:
           cache: 'npm'
       - name: Install PM2
         run: |
-          npm install -g pm2@6
-          echo "$HOME/.npm-global/bin" >> $GITHUB_PATH
+          npm install -g pm2
 
   checkout:
+    needs: [pre-install-deps]
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
