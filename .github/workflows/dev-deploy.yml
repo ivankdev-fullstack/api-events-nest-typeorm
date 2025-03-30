@@ -1,0 +1,14 @@
+name: Dev Deployment
+on:
+  push:
+    branches: ['dev']
+  workflow_dispatch:
+
+jobs:
+  run-deployment:
+    uses: ./.github/workflows/deployment-flow.yml
+    with:
+      environment: 'dev'
+      runner: 'dev'
+      env_file: 'dev.env'
+    secrets: inherit

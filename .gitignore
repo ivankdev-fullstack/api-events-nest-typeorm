@@ -1,4 +1,5 @@
-database/*
+.vscode
+database
 
 # compiled output
 /dist

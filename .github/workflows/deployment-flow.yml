@@ -1,0 +1,63 @@
+name: Deployment Flow
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      runner:
+        type: string
+        required: true
+      env_file:
+        type: string
+        required: true
+
+jobs:
+  checkout:
+    runs-on: [self-hosted, '${{inputs.runner}}']
+    environment: ${{inputs.environment}}
+    steps:
+      - name: Pull Code
+        uses: actions/checkout@v4
+      - name: Cache Dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+  setup-env:
+    runs-on: [self-hosted, '${{inputs.runner}}']
+    environment: ${{inputs.environment}}
+    steps:
+      - name: Setup .env
+        run: |
+          # APP
+          echo "PORT=${{ vars.PORT }}" >> ${{inputs.env_file}}
+
+          # AUTH
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ${{inputs.env_file}}
+          echo "JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }}" >> ${{inputs.env_file}}
+
+          # DATABASE
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> ${{inputs.env_file}}
+          echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> ${{inputs.env_file}}
+          echo "DATABASE_SYNC=${{ secrets.DATABASE_SYNC }}" >> ${{inputs.env_file}}
+
+    build:
+      needs: [checkout, setup-env]
+      runs-on: [self-hosted, '${{inputs.runner}}']
+      steps:
+        - name: Build Application
+          id: build-website
+          run: npm run build
+
+    deploy:
+      needs: [build]
+      runs-on: [self-hosted, '${{inputs.runner}}']
+      steps:
+        - name: Deploy Application
+          run: NODE_ENV=${{inputs.environment}} pm2 restart dist/src/main.js --name=events-api-${{inputs.environment}}
