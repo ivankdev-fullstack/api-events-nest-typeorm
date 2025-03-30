@@ -47,17 +47,17 @@ jobs:
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> ${{inputs.env_file}}
           echo "DATABASE_SYNC=${{ secrets.DATABASE_SYNC }}" >> ${{inputs.env_file}}
 
-    build:
-      needs: [checkout, setup-env]
-      runs-on: [self-hosted, '${{inputs.runner}}']
-      steps:
-        - name: Build Application
-          id: build-website
-          run: npm run build
+  build:
+    needs: [checkout, setup-env]
+    runs-on: [self-hosted, '${{inputs.runner}}']
+    steps:
+      - name: Build Application
+        id: build-website
+        run: npm run build
 
-    deploy:
-      needs: [build]
-      runs-on: [self-hosted, '${{inputs.runner}}']
-      steps:
-        - name: Deploy Application
-          run: NODE_ENV=${{inputs.environment}} pm2 restart dist/src/main.js --name=events-api-${{inputs.environment}}
+  deploy:
+    needs: [build]
+    runs-on: [self-hosted, '${{inputs.runner}}']
+    steps:
+      - name: Deploy Application
+        run: NODE_ENV=${{inputs.environment}} pm2 restart dist/src/main.js --name=events-api-${{inputs.environment}}
