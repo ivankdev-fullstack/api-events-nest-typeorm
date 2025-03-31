@@ -17,9 +17,6 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Setup npm cache
-        run: |
-          npm config set cache /home/ubuntu/.npm
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
