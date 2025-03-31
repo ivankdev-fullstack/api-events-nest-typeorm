@@ -1,0 +1,12 @@
+name: Prod Deployment
+on:
+  workflow_dispatch:
+
+jobs:
+  run-deployment:
+    uses: ./.github/workflows/deployment-flow.yml
+    with:
+      environment: 'production'
+      runner: 'prod'
+      env_file: 'production.env'
+    secrets: inherit

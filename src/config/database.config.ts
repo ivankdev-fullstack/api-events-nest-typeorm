@@ -7,8 +7,8 @@ export const typeOrmConfig = registerAs(
     return {
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      database: process.env.DATABASE_NAME ?? 'postgres',
-      synchronize: Boolean(parseInt(process.env.DB_SYNC ?? '0')),
+      database: process.env.DATABASE_NAME,
+      synchronize: Boolean(parseInt(process.env.DATABASE_SYNC ?? '0')),
     };
   },
 );

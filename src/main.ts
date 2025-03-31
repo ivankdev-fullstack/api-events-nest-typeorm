@@ -1,14 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
-import { appConfig } from './config/app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  const appConfigStore: ConfigType<typeof appConfig> = app.get(appConfig.KEY);
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  await app.listen(appConfigStore.port);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
