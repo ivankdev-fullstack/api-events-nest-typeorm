@@ -63,9 +63,6 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> ${{inputs.env_file}}
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> ${{inputs.env_file}}
           echo "DATABASE_SYNC=${{ secrets.DATABASE_SYNC }}" >> ${{inputs.env_file}}
-      - name: Debug .env path
-        run: |
-          cat ./dev.env
 
   build:
     needs: [checkout, setup-env]
