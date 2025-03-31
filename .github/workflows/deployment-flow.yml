@@ -51,7 +51,9 @@ jobs:
     environment: ${{inputs.environment}}
     steps:
       - name: Debug .env
-        run: cat ${{ inputs.env_file }}
+        run: |
+          cat ${{inputs}}
+          echo ${{inputs}}
       - name: Setup .env
         run: |
           # APP
