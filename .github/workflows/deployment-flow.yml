@@ -17,10 +17,11 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Install Node.js
+      - name: Install Node.js (ARM64)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          architecture: 'arm64'
           cache: 'npm'
       - name: Install PM2
         run: |
