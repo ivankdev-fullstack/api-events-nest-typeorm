@@ -65,9 +65,7 @@ jobs:
           echo "DATABASE_SYNC=${{ secrets.DATABASE_SYNC }}" >> ${{inputs.env_file}}
       - name: Debug .env path
         run: |
-          echo "Env file path: $(pwd)/${{ inputs.env_file }}"
-          echo ""
-          ls -la $(pwd)
+          echo "cat ./dev.env"
 
   build:
     needs: [checkout, setup-env]
