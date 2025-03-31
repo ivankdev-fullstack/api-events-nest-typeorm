@@ -50,10 +50,8 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Debug .env
-        run: |
-          cat ${{inputs}}
-          echo ${{inputs}}
+      - name: Debug .env path
+        run: ls -la $(pwd)
       - name: Setup .env
         run: |
           # APP
@@ -82,8 +80,8 @@ jobs:
     steps:
       - name: Deploy Application
         run: |
-          echo "echo example"
-          echo "${{inputs.environment}}"
+          export $(grep -v '^#' ${{ inputs.env_file }} | xargs)
+
           if pm2 describe events-api > /dev/null; then
             NODE_ENV=${{inputs.environment}} pm2 restart events-api --update-env
           else
