@@ -78,6 +78,7 @@ jobs:
     steps:
       - name: Deploy Application
         run: |
+          echo ${{inputs.environment}}
           if pm2 describe events-api > /dev/null; then
             NODE_ENV=${{inputs.environment}} pm2 restart events-api --update-env
           else
