@@ -37,7 +37,7 @@ describe('EventController', () => {
   });
 
   it('should be defined', () => {
-    expect(eventController).not.toBeDefined();
+    expect(eventController).toBeDefined();
   });
 
   it('should return an event by ID', async () => {
