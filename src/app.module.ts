@@ -9,6 +9,7 @@ import { Event } from './event/entity/event.entity';
 import { EventModule } from './event/event.module';
 import { User } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
+import { appConfigSchema } from './config/types/config.types';
 
 @Module({
   imports: [
@@ -17,10 +18,10 @@ import { UserModule } from './user/user.module';
       load: [typeOrmConfig, authConfig],
       expandVariables: true,
       envFilePath: `${process.env.NODE_ENV}.env`,
-      // validationSchema: appConfigSchema,
-      // validationOptions: {
-      //   abortEarly: false,
-      // },
+      validationSchema: appConfigSchema,
+      validationOptions: {
+        abortEarly: false,
+      },
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
