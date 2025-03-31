@@ -1,0 +1,23 @@
+name: Run Tests
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Code
+        uses: actions/checkout@v4
+      - name: Cache deps
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install deps
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run tests
+        run: npm run test
