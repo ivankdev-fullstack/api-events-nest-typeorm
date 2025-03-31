@@ -17,6 +17,8 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, typeOrmConfig, authConfig],
+      expandVariables: true,
+      envFilePath: `${process.env.NODE_ENV}.env`,
       validationSchema: appConfigSchema,
       validationOptions: {
         abortEarly: true,
