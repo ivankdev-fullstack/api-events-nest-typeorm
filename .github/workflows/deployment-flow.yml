@@ -50,8 +50,6 @@ jobs:
     runs-on: [self-hosted, '${{inputs.runner}}']
     environment: ${{inputs.environment}}
     steps:
-      - name: Debug .env path
-        run: ls -la $(pwd)
       - name: Setup .env
         run: |
           # APP
@@ -65,6 +63,11 @@ jobs:
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> ${{inputs.env_file}}
           echo "DATABASE_NAME=${{ secrets.DATABASE_NAME }}" >> ${{inputs.env_file}}
           echo "DATABASE_SYNC=${{ secrets.DATABASE_SYNC }}" >> ${{inputs.env_file}}
+      - name: Debug .env path
+        run: |
+          echo "Env file path: $(pwd)/${{ inputs.env_file }}"
+          echo ""
+          ls -la $(pwd)
 
   build:
     needs: [checkout, setup-env]
